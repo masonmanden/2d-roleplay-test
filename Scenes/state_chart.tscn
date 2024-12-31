@@ -1,0 +1,44 @@
+[gd_scene load_steps=5 format=3 uid="uid://bjlabskh3ww5v"]
+
+[ext_resource type="Script" path="res://addons/godot_state_charts/state_chart.gd" id="1_ghjk7"]
+[ext_resource type="Script" path="res://addons/godot_state_charts/compound_state.gd" id="2_rt4yq"]
+[ext_resource type="Script" path="res://addons/godot_state_charts/atomic_state.gd" id="3_5q20m"]
+[ext_resource type="Script" path="res://addons/godot_state_charts/transition.gd" id="4_xql4q"]
+
+[node name="StateChart" type="Node"]
+script = ExtResource("1_ghjk7")
+
+[node name="Root" type="Node" parent="."]
+script = ExtResource("2_rt4yq")
+initial_state = NodePath("Idle")
+
+[node name="Idle" type="Node" parent="Root"]
+script = ExtResource("3_5q20m")
+
+[node name="To Hit" type="Node" parent="Root/Idle"]
+script = ExtResource("4_xql4q")
+to = NodePath("../../Hit")
+event = &"take_damage"
+delay_in_seconds = "0.0"
+
+[node name="To Dead" type="Node" parent="Root/Idle"]
+script = ExtResource("4_xql4q")
+to = NodePath("../../Dead")
+event = &"dead"
+delay_in_seconds = "0.0"
+
+[node name="Hit" type="Node" parent="Root"]
+script = ExtResource("3_5q20m")
+
+[node name="To Idle" type="Node" parent="Root/Hit"]
+script = ExtResource("4_xql4q")
+to = NodePath("../../Idle")
+delay_in_seconds = "1"
+
+[node name="Dead" type="Node" parent="Root"]
+script = ExtResource("3_5q20m")
+
+[node name="To Idle" type="Node" parent="Root/Dead"]
+script = ExtResource("4_xql4q")
+to = NodePath("../../Idle")
+delay_in_seconds = "1"

@@ -1,0 +1,76 @@
+[gd_scene load_steps=7 format=3 uid="uid://vlhrtec5tdgl"]
+
+[ext_resource type="Script" path="res://Scenes/unit.gd" id="1_ngtqc"]
+[ext_resource type="Script" path="res://addons/godot_state_charts/state_chart.gd" id="1_ogqko"]
+[ext_resource type="Script" path="res://addons/godot_state_charts/compound_state.gd" id="2_017sq"]
+[ext_resource type="Script" path="res://addons/godot_state_charts/parallel_state.gd" id="3_3guld"]
+[ext_resource type="Script" path="res://addons/godot_state_charts/atomic_state.gd" id="3_mvt7e"]
+[ext_resource type="Script" path="res://addons/godot_state_charts/transition.gd" id="4_r8vf1"]
+
+[node name="Unit" type="CharacterBody2D"]
+top_level = true
+script = ExtResource("1_ngtqc")
+SPEED = 10
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+unique_name_in_owner = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+
+[node name="StateChart" type="Node" parent="."]
+script = ExtResource("1_ogqko")
+
+[node name="MainRoot" type="Node" parent="StateChart"]
+script = ExtResource("3_3guld")
+
+[node name="Base" type="Node" parent="StateChart/MainRoot"]
+script = ExtResource("2_017sq")
+initial_state = NodePath("Idle")
+
+[node name="Idle" type="Node" parent="StateChart/MainRoot/Base"]
+script = ExtResource("3_mvt7e")
+
+[node name="To Hit" type="Node" parent="StateChart/MainRoot/Base/Idle"]
+script = ExtResource("4_r8vf1")
+to = NodePath("../../Hit")
+event = &"take_damage"
+delay_in_seconds = "0.0"
+
+[node name="To Dead" type="Node" parent="StateChart/MainRoot/Base/Idle"]
+script = ExtResource("4_r8vf1")
+to = NodePath("../../Dead")
+event = &"dead"
+delay_in_seconds = "0.0"
+
+[node name="Hit" type="Node" parent="StateChart/MainRoot/Base"]
+script = ExtResource("3_mvt7e")
+
+[node name="To Idle" type="Node" parent="StateChart/MainRoot/Base/Hit"]
+script = ExtResource("4_r8vf1")
+to = NodePath("../../Idle")
+delay_in_seconds = "1"
+
+[node name="To Hit" type="Node" parent="StateChart/MainRoot/Base/Hit"]
+script = ExtResource("4_r8vf1")
+to = NodePath("..")
+event = &"take_damage"
+delay_in_seconds = "0.0"
+
+[node name="To Dead" type="Node" parent="StateChart/MainRoot/Base/Hit"]
+script = ExtResource("4_r8vf1")
+to = NodePath("../../Dead")
+event = &"dead"
+delay_in_seconds = "0.0"
+
+[node name="Dead" type="Node" parent="StateChart/MainRoot/Base"]
+script = ExtResource("3_mvt7e")
+
+[node name="To Idle" type="Node" parent="StateChart/MainRoot/Base/Dead"]
+script = ExtResource("4_r8vf1")
+to = NodePath("../../Idle")
+delay_in_seconds = "0"
+
+[connection signal="state_processing" from="StateChart/MainRoot/Base/Idle" to="." method="_on_idle_state_processing"]
+[connection signal="state_processing" from="StateChart/MainRoot/Base/Hit" to="." method="_on_hit_state_processing"]
+[connection signal="state_entered" from="StateChart/MainRoot/Base/Dead" to="." method="_on_dead_state_entered"]
+[connection signal="state_exited" from="StateChart/MainRoot/Base/Dead" to="." method="_on_dead_state_exited"]

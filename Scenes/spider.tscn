@@ -1,0 +1,24 @@
+[gd_scene load_steps=5 format=3 uid="uid://8iiit6s625no"]
+
+[ext_resource type="Script" path="res://Scripts/spider.gd" id="1_ygdrs"]
+[ext_resource type="SpriteFrames" uid="uid://da21dpew5nswq" path="res://Scenes/enemy_spider_animation.tres" id="2_q6te2"]
+[ext_resource type="Script" path="res://Scripts/MyHurtBox.gd" id="3_ovqlc"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1t70k"]
+size = Vector2(15, 14)
+
+[node name="Spider" type="CharacterBody2D"]
+script = ExtResource("1_ygdrs")
+HEALTH = 100
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = ExtResource("2_q6te2")
+animation = &"idle"
+autoplay = "idle"
+
+[node name="MyHurtBox" type="Area2D" parent="."]
+script = ExtResource("3_ovqlc")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="MyHurtBox"]
+position = Vector2(-0.5, -1)
+shape = SubResource("RectangleShape2D_1t70k")

@@ -1,0 +1,29 @@
+[gd_scene load_steps=5 format=3 uid="uid://cqdcwm765vsrc"]
+
+[ext_resource type="PackedScene" uid="uid://cn6110fmu8bpp" path="res://Scenes/enemy.tscn" id="1_7ayun"]
+[ext_resource type="SpriteFrames" uid="uid://da21dpew5nswq" path="res://Scenes/enemy_spider_animation.tres" id="2_h0rhr"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_hujhs"]
+size = Vector2(16, 15)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_nuia5"]
+size = Vector2(16, 15)
+
+[node name="Enemy_spider" instance=ExtResource("1_7ayun")]
+top_level = false
+
+[node name="AnimatedSprite2D" parent="." index="0"]
+sprite_frames = ExtResource("2_h0rhr")
+animation = &"idle"
+autoplay = "idle"
+
+[node name="CollisionShape2D" parent="." index="1"]
+position = Vector2(0, -0.5)
+shape = SubResource("RectangleShape2D_hujhs")
+
+[node name="HitboxCollision" parent="HitboxComponent" index="0"]
+position = Vector2(0, -0.5)
+shape = SubResource("RectangleShape2D_nuia5")
+
+[node name="To Idle" parent="StateChart/MainRoot/Base/Dead" index="0"]
+delay_in_seconds = "1"

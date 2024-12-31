@@ -1,0 +1,82 @@
+[gd_scene load_steps=11 format=3 uid="uid://cn6110fmu8bpp"]
+
+[ext_resource type="PackedScene" uid="uid://vlhrtec5tdgl" path="res://Scenes/unit.tscn" id="1_ofp18"]
+[ext_resource type="Script" path="res://Scenes/enemy.gd" id="2_0po55"]
+[ext_resource type="Script" path="res://addons/godot_state_charts/compound_state.gd" id="2_2qw34"]
+[ext_resource type="Script" path="res://Scripts/health_component.gd" id="2_3ra6g"]
+[ext_resource type="Script" path="res://addons/godot_state_charts/atomic_state.gd" id="3_0e12p"]
+[ext_resource type="Script" path="res://Scripts/hitbox_component.gd" id="3_iaxxh"]
+[ext_resource type="PackedScene" uid="uid://vtk7piuuyjny" path="res://Scenes/health_bar.tscn" id="3_ntxis"]
+[ext_resource type="Script" path="res://addons/godot_state_charts/transition.gd" id="4_sqcny"]
+[ext_resource type="Script" path="res://Scripts/aggression_range.gd" id="7_fvdn7"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_47la8"]
+radius = 11.5434
+
+[node name="Enemy" instance=ExtResource("1_ofp18")]
+script = ExtResource("2_0po55")
+SPEED = 0
+
+[node name="HealthComponent" type="Node2D" parent="." index="2" node_paths=PackedStringArray("state_chart")]
+script = ExtResource("2_3ra6g")
+state_chart = NodePath("../StateChart")
+
+[node name="HealthBar" parent="HealthComponent" index="0" instance=ExtResource("3_ntxis")]
+offset_left = -7.0
+offset_top = -10.0
+offset_right = 8.0
+offset_bottom = -8.0
+metadata/_edit_use_anchors_ = true
+
+[node name="HitboxComponent" type="Area2D" parent="." index="3" node_paths=PackedStringArray("health_component", "state_chart")]
+collision_layer = 2
+collision_mask = 2
+script = ExtResource("3_iaxxh")
+health_component = NodePath("../HealthComponent")
+state_chart = NodePath("../StateChart")
+
+[node name="HitboxCollision" type="CollisionShape2D" parent="HitboxComponent" index="0"]
+
+[node name="AggressionRange" type="Area2D" parent="." index="4" node_paths=PackedStringArray("state_chart")]
+visible = false
+script = ExtResource("7_fvdn7")
+SPEED = 10
+state_chart = NodePath("../StateChart")
+
+[node name="AggressionRangeCollision" type="CollisionShape2D" parent="AggressionRange" index="0"]
+scale = Vector2(3, 3)
+shape = SubResource("CircleShape2D_47la8")
+
+[node name="Aggression" type="Node" parent="StateChart/MainRoot" index="1"]
+script = ExtResource("2_2qw34")
+initial_state = NodePath("Passive")
+
+[node name="Passive" type="Node" parent="StateChart/MainRoot/Aggression" index="0"]
+script = ExtResource("3_0e12p")
+
+[node name="To Aggressive" type="Node" parent="StateChart/MainRoot/Aggression/Passive" index="0"]
+script = ExtResource("4_sqcny")
+to = NodePath("../../Aggressive")
+event = &"aggressive"
+delay_in_seconds = "0.0"
+
+[node name="Aggressive" type="Node" parent="StateChart/MainRoot/Aggression" index="1"]
+script = ExtResource("3_0e12p")
+
+[node name="To Passive" type="Node" parent="StateChart/MainRoot/Aggression/Aggressive" index="0"]
+script = ExtResource("4_sqcny")
+to = NodePath("../../Passive")
+event = &"passive"
+delay_in_seconds = "5"
+
+[node name="To Aggressive" type="Node" parent="StateChart/MainRoot/Aggression/Aggressive" index="1"]
+script = ExtResource("4_sqcny")
+to = NodePath("..")
+event = &"aggressive"
+delay_in_seconds = "0.0"
+
+[connection signal="body_entered" from="AggressionRange" to="." method="_on_aggression_range_body_entered"]
+[connection signal="body_entered" from="AggressionRange" to="AggressionRange" method="_on_body_entered"]
+[connection signal="body_exited" from="AggressionRange" to="AggressionRange" method="_on_body_exited"]
+[connection signal="state_physics_processing" from="StateChart/MainRoot/Aggression/Aggressive" to="." method="_on_aggressive_state_physics_processing"]
+[connection signal="state_physics_processing" from="StateChart/MainRoot/Aggression/Aggressive" to="AggressionRange" method="_on_aggressive_state_physics_processing"]

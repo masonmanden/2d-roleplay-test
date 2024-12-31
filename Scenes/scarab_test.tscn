@@ -1,0 +1,136 @@
+[gd_scene load_steps=17 format=3 uid="uid://cidqbabxyuspd"]
+
+[ext_resource type="Texture2D" uid="uid://d1h0uhnuo5fe1" path="res://Assets/Robot Warfare Asset Pack 22-11-24/Robots/Scarab.png" id="1_8hfre"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vv3et"]
+atlas = ExtResource("1_8hfre")
+region = Rect2(0, 64, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4n2py"]
+atlas = ExtResource("1_8hfre")
+region = Rect2(0, 32, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5ukoo"]
+atlas = ExtResource("1_8hfre")
+region = Rect2(16, 32, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_v404m"]
+atlas = ExtResource("1_8hfre")
+region = Rect2(0, 48, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tden2"]
+atlas = ExtResource("1_8hfre")
+region = Rect2(16, 48, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_geiyo"]
+atlas = ExtResource("1_8hfre")
+region = Rect2(32, 48, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_15oni"]
+atlas = ExtResource("1_8hfre")
+region = Rect2(48, 48, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hublx"]
+atlas = ExtResource("1_8hfre")
+region = Rect2(64, 48, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ns0y7"]
+atlas = ExtResource("1_8hfre")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_b7co5"]
+atlas = ExtResource("1_8hfre")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_d6snp"]
+atlas = ExtResource("1_8hfre")
+region = Rect2(0, 16, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_o2vu8"]
+atlas = ExtResource("1_8hfre")
+region = Rect2(16, 16, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_utbvs"]
+atlas = ExtResource("1_8hfre")
+region = Rect2(32, 16, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_eiq06"]
+atlas = ExtResource("1_8hfre")
+region = Rect2(48, 16, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_mrnk7"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vv3et")
+}],
+"loop": true,
+"name": &"die",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4n2py")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5ukoo")
+}],
+"loop": true,
+"name": &"fire",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_v404m")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_tden2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_geiyo")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_15oni")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hublx")
+}],
+"loop": true,
+"name": &"hit",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ns0y7")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_b7co5")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 3.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_d6snp")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_o2vu8")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_utbvs")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_eiq06")
+}],
+"loop": true,
+"name": &"walk",
+"speed": 5.0
+}]
+
+[node name="ScarabTest" type="CharacterBody2D"]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_mrnk7")
+animation = &"idle"
+autoplay = "idle"

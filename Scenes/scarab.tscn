@@ -1,0 +1,217 @@
+[gd_scene load_steps=25 format=3 uid="uid://82de5dka3jli"]
+
+[ext_resource type="Script" path="res://Scripts/scarab.gd" id="1_q1opw"]
+[ext_resource type="Texture2D" uid="uid://d1h0uhnuo5fe1" path="res://Assets/Robot Warfare Asset Pack 22-11-24/Robots/Scarab.png" id="1_y8cpk"]
+[ext_resource type="Script" path="res://Scripts/health_component.gd" id="2_yxcbw"]
+[ext_resource type="Script" path="res://Scripts/hitbox_component.gd" id="3_ttoqb"]
+[ext_resource type="Script" path="res://addons/godot_state_charts/state_chart.gd" id="5_krlel"]
+[ext_resource type="Script" path="res://addons/godot_state_charts/compound_state.gd" id="6_l5x20"]
+[ext_resource type="Script" path="res://addons/godot_state_charts/atomic_state.gd" id="7_xgrkk"]
+[ext_resource type="Script" path="res://addons/godot_state_charts/transition.gd" id="8_47kfh"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vv3et"]
+atlas = ExtResource("1_y8cpk")
+region = Rect2(0, 64, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4n2py"]
+atlas = ExtResource("1_y8cpk")
+region = Rect2(0, 32, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5ukoo"]
+atlas = ExtResource("1_y8cpk")
+region = Rect2(16, 32, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_v404m"]
+atlas = ExtResource("1_y8cpk")
+region = Rect2(0, 48, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tden2"]
+atlas = ExtResource("1_y8cpk")
+region = Rect2(16, 48, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_geiyo"]
+atlas = ExtResource("1_y8cpk")
+region = Rect2(32, 48, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_15oni"]
+atlas = ExtResource("1_y8cpk")
+region = Rect2(48, 48, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hublx"]
+atlas = ExtResource("1_y8cpk")
+region = Rect2(64, 48, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ns0y7"]
+atlas = ExtResource("1_y8cpk")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_b7co5"]
+atlas = ExtResource("1_y8cpk")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_d6snp"]
+atlas = ExtResource("1_y8cpk")
+region = Rect2(0, 16, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_o2vu8"]
+atlas = ExtResource("1_y8cpk")
+region = Rect2(16, 16, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_utbvs"]
+atlas = ExtResource("1_y8cpk")
+region = Rect2(32, 16, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_eiq06"]
+atlas = ExtResource("1_y8cpk")
+region = Rect2(48, 16, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_fkcl4"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vv3et")
+}],
+"loop": true,
+"name": &"die",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4n2py")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5ukoo")
+}],
+"loop": true,
+"name": &"fire",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_v404m")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_tden2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_geiyo")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_15oni")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hublx")
+}],
+"loop": true,
+"name": &"hit",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ns0y7")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_b7co5")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 3.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_d6snp")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_o2vu8")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_utbvs")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_eiq06")
+}],
+"loop": true,
+"name": &"walk",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_xg6q7"]
+size = Vector2(14, 10)
+
+[node name="scarab" type="CharacterBody2D"]
+collision_layer = 2
+collision_mask = 2
+motion_mode = 1
+wall_min_slide_angle = 0.0
+script = ExtResource("1_q1opw")
+SPEED = 30
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_fkcl4")
+animation = &"idle"
+autoplay = "idle"
+
+[node name="HealthComponent" type="Node2D" parent="." node_paths=PackedStringArray("state_chart")]
+script = ExtResource("2_yxcbw")
+MAX_HEALTH = 100.0
+state_chart = NodePath("../StateChart")
+
+[node name="HitboxComponent2" type="Area2D" parent="." node_paths=PackedStringArray("health_component", "state_chart")]
+script = ExtResource("3_ttoqb")
+health_component = NodePath("../HealthComponent")
+state_chart = NodePath("../StateChart")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HitboxComponent2"]
+position = Vector2(1, 0)
+shape = SubResource("RectangleShape2D_xg6q7")
+
+[node name="StateChart" type="Node" parent="."]
+script = ExtResource("5_krlel")
+
+[node name="Root" type="Node" parent="StateChart"]
+script = ExtResource("6_l5x20")
+initial_state = NodePath("Idle")
+
+[node name="Idle" type="Node" parent="StateChart/Root"]
+script = ExtResource("7_xgrkk")
+
+[node name="To Hit" type="Node" parent="StateChart/Root/Idle"]
+script = ExtResource("8_47kfh")
+to = NodePath("../../Hit")
+event = &"take_damage"
+delay_in_seconds = "0.0"
+
+[node name="To Dead" type="Node" parent="StateChart/Root/Idle"]
+script = ExtResource("8_47kfh")
+to = NodePath("../../Dead")
+event = &"dead"
+delay_in_seconds = "0.0"
+
+[node name="Hit" type="Node" parent="StateChart/Root"]
+script = ExtResource("7_xgrkk")
+
+[node name="To Idle" type="Node" parent="StateChart/Root/Hit"]
+script = ExtResource("8_47kfh")
+to = NodePath("../../Idle")
+delay_in_seconds = "1"
+
+[node name="To Hit" type="Node" parent="StateChart/Root/Hit"]
+script = ExtResource("8_47kfh")
+to = NodePath("..")
+event = &"take_damage"
+delay_in_seconds = "0.0"
+
+[node name="Dead" type="Node" parent="StateChart/Root"]
+script = ExtResource("7_xgrkk")
+
+[node name="To Idle" type="Node" parent="StateChart/Root/Dead"]
+script = ExtResource("8_47kfh")
+to = NodePath("../../Idle")
+delay_in_seconds = "1"
+
+[node name="Timer" type="Timer" parent="."]
+
+[connection signal="state_processing" from="StateChart/Root/Idle" to="." method="_on_idle_state_processing"]
+[connection signal="state_processing" from="StateChart/Root/Hit" to="." method="_on_hit_state_processing"]
+[connection signal="state_entered" from="StateChart/Root/Dead" to="." method="_on_dead_state_entered"]
+[connection signal="state_exited" from="StateChart/Root/Dead" to="." method="_on_dead_state_exited"]

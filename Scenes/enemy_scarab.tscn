@@ -1,0 +1,31 @@
+[gd_scene load_steps=5 format=3 uid="uid://cp0tqhppsmf1e"]
+
+[ext_resource type="PackedScene" uid="uid://cn6110fmu8bpp" path="res://Scenes/enemy.tscn" id="1_evllt"]
+[ext_resource type="SpriteFrames" uid="uid://bfhwd5hirgpcc" path="res://Scenes/enemy_scarab_animation.tres" id="2_77whv"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_oo8am"]
+size = Vector2(14, 10)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_qienv"]
+size = Vector2(14, 10)
+
+[node name="Enemy_Scarab" instance=ExtResource("1_evllt")]
+top_level = false
+
+[node name="AnimatedSprite2D" parent="." index="0"]
+sprite_frames = ExtResource("2_77whv")
+animation = &"die"
+
+[node name="CollisionShape2D" parent="." index="1"]
+position = Vector2(1, 0)
+shape = SubResource("RectangleShape2D_oo8am")
+
+[node name="HealthComponent" parent="." index="2"]
+MAX_HEALTH = 50.0
+
+[node name="HitboxCollision" parent="HitboxComponent" index="0"]
+position = Vector2(1, 0)
+shape = SubResource("RectangleShape2D_qienv")
+
+[node name="To Idle" parent="StateChart/MainRoot/Base/Dead" index="0"]
+delay_in_seconds = "1"

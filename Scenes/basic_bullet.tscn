@@ -1,0 +1,88 @@
+[gd_scene load_steps=12 format=3 uid="uid://0q1at3ql68pi"]
+
+[ext_resource type="Texture2D" uid="uid://dmpfu80swy71y" path="res://Assets/Robot Warfare Asset Pack 22-11-24/Projectiles/bullets+plasma.png" id="1_ge4py"]
+[ext_resource type="Script" path="res://Scripts/basic_bullet.gd" id="1_wj6o2"]
+[ext_resource type="Script" path="res://Scripts/MyHitBox.gd" id="3_dde3h"]
+[ext_resource type="Script" path="res://Scripts/attack_component.gd" id="4_4iokl"]
+[ext_resource type="Script" path="res://Scripts/hitbox_component.gd" id="5_y3xif"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ks6yd"]
+atlas = ExtResource("1_ge4py")
+region = Rect2(0, 0, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_80fa3"]
+atlas = ExtResource("1_ge4py")
+region = Rect2(0, 0, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fg85a"]
+atlas = ExtResource("1_ge4py")
+region = Rect2(8, 0, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2goqm"]
+atlas = ExtResource("1_ge4py")
+region = Rect2(16, 0, 8, 8)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_25q5e"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ks6yd")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_80fa3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fg85a")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2goqm")
+}],
+"loop": true,
+"name": &"hit",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_skhhy"]
+size = Vector2(2, 2)
+
+[node name="Basic_Bullet" type="Node2D"]
+script = ExtResource("1_wj6o2")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_25q5e")
+animation = &"hit"
+frame_progress = 0.203633
+
+[node name="MyHitBox" type="Area2D" parent="AnimatedSprite2D"]
+collision_layer = 2
+collision_mask = 2
+script = ExtResource("3_dde3h")
+damage = 10
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AnimatedSprite2D/MyHitBox"]
+shape = SubResource("RectangleShape2D_skhhy")
+
+[node name="Life" type="Timer" parent="."]
+wait_time = 3.0
+autostart = true
+
+[node name="AttackComponent" type="Node2D" parent="."]
+script = ExtResource("4_4iokl")
+attack_damage = 10.0
+
+[node name="HitboxComponent" type="Area2D" parent="."]
+collision_layer = 2
+collision_mask = 2
+script = ExtResource("5_y3xif")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HitboxComponent"]
+
+[connection signal="area_entered" from="AnimatedSprite2D/MyHitBox" to="." method="_on_my_hit_box_area_entered"]
+[connection signal="area_entered" from="AnimatedSprite2D/MyHitBox" to="AttackComponent" method="_on_my_hit_box_area_entered"]
+[connection signal="timeout" from="Life" to="." method="_on_life_timeout"]
+[connection signal="area_entered" from="HitboxComponent" to="AttackComponent" method="_on_hitbox_component_area_entered"]
